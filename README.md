@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # vue-project
 
 This template should help get you started developing with Vue 3 in Vite.
@@ -31,4 +30,3 @@ npm run build
 =======
 # vue-project-tasty
 Vue tutorial project for store
->>>>>>> 364b278f787e78ffc3f47223acbeb5effda4d38b
