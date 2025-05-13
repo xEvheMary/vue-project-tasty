@@ -26,9 +26,7 @@ export default {
     }
 
     watch(getToken, (newValue, oldValue) => {
-      if (newValue !== oldValue) {
-        menuComponent.value = newValue ? 'signup-menu' : 'profile-menu';
-      }
+      menuComponent.value = newValue ? 'profile-menu' : 'signup-menu';
     });
 
     return {

@@ -1,6 +1,26 @@
 <script setup>
 import BaseInput from '../ui/BaseInput.vue';
 import BaseButton from '../ui/BaseButton.vue';
+import { reactive } from 'vue';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+
+const store = useStore();
+const router = useRouter();
+const loginData = reactive({
+    email: '',
+    password: '',
+    isLogin: true
+});
+
+const login = async () => {
+    try {
+        await store.dispatch('auth/getLoginData', loginData);
+        router.push("/");
+    } catch (error) {
+        console.error('Login failed:', error);
+    }
+};
 </script>
 <template>
     <div class="container-fluid py-5" style="background-color: #f5f5f5;">
@@ -10,11 +30,11 @@ import BaseButton from '../ui/BaseButton.vue';
                 <h2 class="mt-4">Log in to your account</h2>
                 <p>Welcome back! Please enter your details.</p>
             </div>
-            <form>
-                <div class="my-4"><base-input type="text" identity="email" placeholder="Username"
-                        label="Email"></base-input></div>
+            <form @submit.prevent="login">
+                <div class="my-4"><base-input type="text" identity="email" placeholder="Username" label="Email"
+                        v-model="loginData.email"></base-input></div>
                 <div class="my-4"><base-input type="password" identity="password" placeholder="Password"
-                        label="Password"></base-input></div>
+                        label="Password" v-model="loginData.password"></base-input></div>
                 <base-button class="login w-100 my-3">Login</base-button>
             </form>
             <div class="text-center mt-4">

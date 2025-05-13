@@ -1,3 +1,19 @@
+<script setup>
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+
+const store = useStore();
+const router = useRouter();
+
+const logout = async () => {
+    try {
+        store.commit('auth/setUserLogout');
+        router.push("/");
+    } catch (error) {
+        console.error('Logout failed:', error);
+    }
+};
+</script>
 <template>
     <div class="header__signup col-8 col-sm-4 fw-semibold d-flex justify-content-evenly align-items-center text-decoration-none"
         style="text-align: right">
@@ -14,7 +30,7 @@
                     <li>
                         <hr class="dropdown-divider" />
                     </li>
-                    <li class="dropdown-item">Logout</li>
+                    <li class="dropdown-item" @click="logout">Logout</li>
                 </ul>
             </li>
         </ul>
