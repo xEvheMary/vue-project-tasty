@@ -3,7 +3,7 @@ import BaseInput from '../ui/BaseInput.vue';
 import BaseButton from '../ui/BaseButton.vue';
 import BaseTextArea from '../ui/BaseTextArea.vue';
 import BaseSelect from '../ui/BaseSelect.vue';
-import { reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 
@@ -23,6 +23,9 @@ const recipeData = reactive({
 const ingredientCount = ref(1);
 const directionCount = ref(1);
 
+const props = defineProps({
+    isEdit: { type: Boolean, default: false },
+});
 const checkImage = (event) => {
     const file = event.target.files[0];
     const reader = new FileReader();
@@ -50,9 +53,21 @@ const deleteDirection = (index) => {
     directionCount.value--;
 };
 const addNewRecipe = async () => {
-    await store.dispatch('recipe/addNewRecipe', recipeData);
+    if (props.isEdit) {
+        await store.dispatch('recipe/updateRecipe', { id: router.currentRoute.value.params.id, newRecipe: recipeData })
+    } else {
+        await store.dispatch('recipe/addNewRecipe', recipeData);
+    }
     router.push('/user/user-recipe');
 };
+onMounted(() => {
+    if (props.isEdit) {
+        const recipeDetail = store.state.recipe.recipeDetail;
+        Object.assign(recipeData, recipeDetail);
+        ingredientCount.value = recipeData.ingredients.length;
+        directionCount.value = recipeData.directions.length;
+    }
+});
 </script>
 <template>
     <li class="list-group-item">
@@ -62,8 +77,10 @@ const addNewRecipe = async () => {
                 <p class="my-3 fs-5 fw-semibold">General Information</p>
                 <div>
                     <!-- Image Start -->
-                    <div class="mb-3"><base-input type="file" identity="recipeImage" label="Photo Recipe"
+                    <div class="mb-3">
+                        <base-input type="file" identity="recipeImage" label="Photo Recipe"
                             @input="checkImage"></base-input>
+                        <div><img :src="recipeData.imageLink" :alt="recipeData.name" class="image"></div>
                     </div>
                     <!-- Image End -->
 
@@ -185,3 +202,9 @@ const addNewRecipe = async () => {
         </form>
     </li>
 </template>
+<style>
+.image_limit {
+    max-width: 30%;
+    aspect-ratio: 1/1;
+}
+</style>

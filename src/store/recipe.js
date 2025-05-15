@@ -68,6 +68,15 @@ export default {
             catch (error) {
                 console.error("Error deleting recipe:", error);
             }
-        }
+        },
+        async updateRecipe({ dispatch, rootState }, { id, newRecipe }) {
+            try {
+                const { data } = await axios.put(
+                `https://vue-js-project-3dc39-default-rtdb.firebaseio.com/recipes/${id}.json?auth=${rootState.auth.token}`, newRecipe);
+                await dispatch("getRecipeData")
+            } catch (error) {
+            console.log(error);
+            }
+            },
     }
 }
