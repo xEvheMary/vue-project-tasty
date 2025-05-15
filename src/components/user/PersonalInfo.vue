@@ -1,3 +1,12 @@
+<script setup>
+import { computed } from 'vue';
+import { useStore } from 'vuex';
+
+const store = useStore();
+const userData = computed(() => {
+    return store.state.auth.userLogin;
+});
+</script>
 <template>
     <ul class="list-group">
         <li class="list-group-item">
@@ -18,10 +27,10 @@
                     <p>Email</p>
                 </div>
                 <div class="ps-4 ms-4">
-                    <p>Jack</p>
-                    <p>Daniel</p>
-                    <p>jackdaniel</p>
-                    <p>jackdaniel@mail.com</p>
+                    <p>{{ userData.firstname }}</p>
+                    <p>{{ userData.lastname }}</p>
+                    <p>{{ userData.username }}</p>
+                    <p>{{ userData.email }}</p>
                 </div>
             </div>
         </li>

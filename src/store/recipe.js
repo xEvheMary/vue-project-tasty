@@ -15,7 +15,10 @@ export default {
         },
         setRecipeDetail(state, payload) {
             state.recipeDetail = payload;
-        }
+        },
+        setNewRecipe(state, payload) {
+            state.recipes.push(payload);
+        },
     },
     actions: {
         async getRecipeData({ commit }) {
@@ -38,6 +41,32 @@ export default {
             }
             catch (error) {
                 console.error("Error fetching recipe detail:", error);
+            }
+        },
+        async addNewRecipe({ commit, rootState }, payload) {
+            const newData = {
+                ...payload,
+                username: rootState.auth.userLogin.username,
+                userId: rootState.auth.userLogin.userId,
+                likes: ['null'],
+                createdAt: Date.now(),
+            };
+            try {
+
+                const {data} = await axios.post(`https://vue-js-project-3dc39-default-rtdb.firebaseio.com/recipes.json?auth=${rootState.auth.token}`, newData);
+                commit("setNewRecipe", {id:data.name, ...newData});
+            }
+            catch (error) {
+                console.error("Error adding new recipe:", error);
+            }
+        },
+        async deleteRecipe({ commit, rootState }, payload) {
+            try {
+                await axios.delete(`https://vue-js-project-3dc39-default-rtdb.firebaseio.com/recipes/${payload}.json?auth=${rootState.auth.token}`);
+                await dispatch("getRecipeData");
+            }
+            catch (error) {
+                console.error("Error deleting recipe:", error);
             }
         }
     }

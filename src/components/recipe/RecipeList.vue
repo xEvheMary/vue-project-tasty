@@ -10,7 +10,7 @@ defineProps({
     <div class="recipe__list-recipe row">
         <div v-for="recipe in recipes" :key="recipe.id" class="col-12 col-lg-3 col-sm-4 position-relative"
             style="padding-top: 12px; padding-bottom: 12px">
-            <RouterLink :to="'recipe/' + (recipe.id - 1)" class="card text-decoration-none" style="height: 398px">
+            <RouterLink :to="'recipe/' + recipe.id" class="card text-decoration-none" style="height: 398px">
                 <img v-bind:src="recipe.imageLink" class="card-img-top" alt="Food" height="240" width="285"
                     style="object-fit: cover" />
                 <div class="card-body" style="color: #0a0a0a">
